@@ -1,29 +1,28 @@
 name: Build APK
-
-on:
-  push:
-    branches: [ main ]
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4 # Обновили с v3 на v4
+      - uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4 # Обновили с v3 на v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3 # Используем актуальный экшен для Gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
-    - name: Build APK
-      run: gradle assembleDebug
+      - name: Build with Gradle
+        # Мы используем команду 'gradle', так как у нас нет файлов wrapper в репо
+        run: gradle assembleDebug --stacktrace
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v4 # ТА САМАЯ ОШИБКА: обновили v3 на v4
-      with:
-        name: app-debug
-        path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CF-Stats-App
+          path: app/build/outputs/apk/debug/*.apk
+          
